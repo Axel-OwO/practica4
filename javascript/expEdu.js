@@ -1,5 +1,5 @@
 import { database } from "./firebase.js";
-import { ref, push, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+import { ref, push, onValue, get, child, update, remove } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
 // Referencia a la base de datos para los usuarios
 const expeRef = ref(database, 'expEdu');
@@ -126,7 +126,104 @@ if (document.getElementById('dataTableE')) {
         mostrarResultadosEnTabla(resultados);
     });
 
-} else {
+} else if (document.getElementById('dataTableEEE')) {
+    onValue(expeRef, (snapshot) => {
+        const data = snapshot.val();
+        //Cambiar dataTableA
+        const dataTableEEE = document.getElementById('dataTableEEE').getElementsByTagName('tbody')[0];
+
+        dataTableEEE.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
+
+        if (data) {
+            // Mostrar todas las aulas inicialmente
+            Object.keys(data).forEach((key) => {
+                //Cambiar la constante de acuerdo al archivo
+                const expEdu = data[key];
+                const newRow = dataTableEEE.insertRow();
+
+                //Cambiar las como en el metodo anterior
+                const cellnrc = newRow.insertCell(0);
+                const cellproEduDoc = newRow.insertCell(1);
+                const cellnomEE = newRow.insertCell(2);
+                const celldocEE = newRow.insertCell(3);
+                const cellhoras = newRow.insertCell(4);
+                const cellcreditos = newRow.insertCell(5);
+
+                const cellEdit = newRow.insertCell(6);
+                const cellDelete = newRow.insertCell(7);
+
+
+                cellnrc.innerHTML = expEdu.nrc;
+                cellproEduDoc.innerHTML = expEdu.proEduDoc;
+                cellnomEE.innerHTML = expEdu.nomEE;
+                celldocEE.innerHTML = expEdu.docEE;
+                cellhoras.innerHTML = expEdu.horas;
+                cellcreditos.innerHTML = expEdu.creditos;
+
+                const editButton = document.createElement('button');
+                editButton.innerText = 'Editar';
+                editButton.classList.add('btn', 'btn-warning', 'me-2');
+                editButton.onclick = () => editEE(key, expEdu);
+                cellEdit.appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Eliminar';
+                deleteButton.classList.add('btn', 'btn-danger');
+                deleteButton.onclick = () => deleteEE(key);
+                cellDelete.appendChild(deleteButton);
+
+            });
+        } else {
+            console.log('No hay datos disponibles');
+            alert("No hay datos disponibles");
+        }
+
+        function editEE(nrc, expEdu) {
+            const newNrc = prompt("Editar NRC:", expEdu.nrc);
+            const newProedu = prompt("Editar programa educativo:", expEdu.proEduDoc);
+            const newnomEE = prompt("Editar nombre:", expEdu.nomEE);
+            const newdocEE = prompt("Editar docente:", expEdu.docEE);
+            const newHoras = prompt("Editar horas:", expEdu.horas);
+            const newCreditos= prompt("Editar creditos:", expEdu.creditos);
+
+           
+
+            if (newNrc && newnomEE && newProedu && newdocEE && newHoras && newCreditos) {
+                update(ref(database, `expEdu/${nrc}`), {
+                    nrc: newNrc,
+                    nomEE: newnomEE,
+                    proEduDoc: newProedu,
+                    docEE: newdocEE,
+                    horas: newHoras,
+                    creditos: newCreditos
+                }).then(() => {
+                    alert("Datos actualizados con éxito");
+                }).catch((error) => {
+                    alert("Error al actualizar los datos: " + error.message);
+                });
+            } else {
+                alert("Todos los campos son obligatorios para la edición.");
+            }
+        }
+
+        function deleteEE(nrc) {
+            if (confirm("¿Estás seguro de que deseas eliminar esta EE?")) {
+                remove(ref(database, `expEdu/${nrc}`))
+                    .then(() => {
+                        alert("EE eliminada con éxito");
+                        const refreshButton = document.getElementById('showData');
+                        if (refreshButton) {
+                            refreshButton.click(); // Refrescar datos si el botón existe
+                        }
+                    })
+                    .catch((error) => {
+                        alert("Error al eliminar la EE: " + error.message);
+                    });
+            }
+        }
+    });
+
+}else{
     // Guardar datos en Firebase cuando se envía el formulario
     document.getElementById('expForm').addEventListener('submit', (event) => {
         event.preventDefault(); // Evita que el formulario se envíe de manera tradicional
