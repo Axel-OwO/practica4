@@ -207,10 +207,11 @@ if (document.getElementById('dataTableE')) {
                 cellEdit.appendChild(editButton);
 
                 const deleteButton = document.createElement('button');
-                deleteButton.innerText = 'Eliminar';
+                deleteButton.innerText = 'Eliminar _';
                 deleteButton.classList.add('btn', 'btn-danger');
                 deleteButton.onclick = () => deleteEE(key);
                 cellDelete.appendChild(deleteButton);
+
 
             });
         } else {
