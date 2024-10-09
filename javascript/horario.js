@@ -1,7 +1,76 @@
 import { database } from "./firebase.js";
 import { ref, push, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+//DE AQUI ES CHATGPT
+// Referencia a la base de datos para los docentes
+const expEduRef = ref(database, 'expEdu');
 
-// Referencia a la base de datos para los usuarios
+// Función para llenar el select con las experiencias educativa
+function cargareeEnSelect() {
+    const selectee = document.querySelector('select.form-select');
+
+    // Limpiar el select antes de agregar nuevos datos
+    selectee.innerHTML = '<option selected>Seleccione una Experiencia Educativa</option>';
+
+    // Escuchar los cambios en los datos de docentes en Fireba
+    onValue(expEduRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            // Recorrer cada docente y añadirlo como opción en el select
+            Object.keys(data).forEach((key) => {
+                const ee = data[key];
+                const option = document.createElement('option');
+                option.value = ee.nrc;  // Valor que se enviará con el formulario
+                option.textContent = `${ee.nomEE}`;  // Mostrar el nombre y profesión del docente
+                selectee.appendChild(option);
+            });
+        } else {
+            console.log("No hay Experiencia Educativa disponibles en la base de datos");
+        }
+    });
+}
+
+// Llamar a la función cuando la página cargue
+document.addEventListener('DOMContentLoaded', cargareeEnSelect);
+
+// Otras funcionalidades que puedas tener en ExpEdu.js (si aplica)
+
+// Aquí puedes agregar más código si tienes más funciones para manejar el formulario o la lógica de tu aplicación
+//Hasta aqui
+const aulaRef = ref(database, 'aula');
+// Función para llenar el select con las aulas
+function cargaraulaEnSelect() {
+    const selectaula = document.getElementById('aula');
+
+    // Limpiar el select antes de agregar nuevos datos
+    selectaula.innerHTML = '<option selected>Seleccione una Aula</option>';
+
+    // Escuchar los cambios en los datos de Aula en Firebase
+    onValue(aulaRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            // Recorrer cada docente y añadirlo como opción en el select
+            Object.keys(data).forEach((key) => {
+                const aula = data[key];
+                const option = document.createElement('option');
+                option.value = aula.idAula;  // Valor que se enviará con el formulario
+                option.textContent = `${aula.idAula}`;  // Mostrar el nombre y profesión del docente
+                selectaula.appendChild(option);
+            });
+        } else {
+            console.log("No hay Aula disponibles en la base de datos");
+        }
+    });
+}
+
+// Llamar a la función cuando la página cargue
+document.addEventListener('DOMContentLoaded', cargaraulaEnSelect);
+
+// Otras funcionalidades que puedas tener en ExpEdu.js (si aplica)
+
+// Aquí puedes agregar más código si tienes más funciones para manejar el formulario o la lógica de tu aplicación
+//Hasta aqui
+
+// Referencia a la base de datos para las ulas
 const horarioRef = ref(database, 'horario');
 
 //Cambiar el nombre de la tabla 'dataTableA'
