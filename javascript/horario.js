@@ -1,5 +1,5 @@
 import { database } from "./firebase.js";
-import { ref, push, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+import { ref, push, onValue, get, child, update, remove } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
 // Referencia a la base de datos para los expEdu
 const expEduRef = ref(database, 'expEdu');
@@ -125,7 +125,86 @@ if (document.getElementById('dataTableH')) {
         mostrarResultadosEnTabla(resultados);
     });
 
-} else {
+} else if (document.getElementById('dataTableHE')) {
+    onValue(horarioRef, (snapshot) => {
+        const data = snapshot.val();
+        const dataTableHE = document.getElementById('dataTableHE').getElementsByTagName('tbody')[0];
+
+        dataTableHE.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
+
+        if (data) {
+            // Mostrar todos los docentes inicialmente
+            Object.keys(data).forEach((key) => {
+                const horario = data[key];
+                const newRow = dataTableHE.insertRow();
+
+                const cellidHorario = newRow.insertCell(0);
+                const cellee = newRow.insertCell(1);
+                const cellaula = newRow.insertCell(2);
+                const cellhoraEE = newRow.insertCell(3);
+                const cellEdit = newRow.insertCell(4);
+                const cellDelete = newRow.insertCell(5);
+                //const celldocenteEE = newRow.insertCell(4);
+
+                cellidHorario.innerHTML = horario.idHorario;
+                cellee.innerHTML = horario.ExpEduH;
+                cellaula.innerHTML = horario.aula;
+                cellhoraEE.innerHTML = horario.HoraEE;
+                
+                const editButton = document.createElement('button');
+                editButton.innerText = 'Editar';
+                editButton.classList.add('btn', 'btn-warning', 'me-2');
+                editButton.onclick = () => editHorario(key, horario);
+                cellEdit.appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Eliminar';
+                deleteButton.classList.add('btn', 'btn-danger');
+                deleteButton.onclick = () => deleteHorario(key);
+                cellDelete.appendChild(deleteButton);
+
+            });
+        } else {
+            console.log('No hay datos disponibles');
+            alert("No hay datos disponibles");
+        }
+
+        function editHorario(idHorario, horario) {
+            const newidHorario = prompt("Editar id de horario:", horario.idHorario);
+            const newnomExpEduH = prompt("Editar EE:", horario.ExpEduH);
+            const newAula = prompt("Editar aula:", horario.aula);
+            const newHoraEE = prompt("Editar hora:", horario.HoraEE);
+
+            if (newidHorario&& newnomExpEduH && newAula && newHoraEE) {
+                update(ref(database, `horario/${idHorario}`), {
+                    idHorario: newidHorario,
+                    ExpEduH: newnomExpEduH,
+                    aula: newAula,
+                    HoraEE: newHoraEE
+                }).then(() => {
+                    alert("Datos actualizados con éxito");
+                }).catch((error) => {
+                    alert("Error al actualizar los datos: " + error.message);
+                });
+            } else {
+                alert("Todos los campos son obligatorios para la edición.");
+            }
+        }
+
+        function deleteHorario(idHorario) {
+            if (confirm("¿Estás seguro de que deseas eliminar este Horario?")) {
+                remove(ref(database, `horario/${idHorario}`))
+                    .then(() => {
+                        alert("Horario eliminado con éxito");
+                    })
+                    .catch((error) => {
+                        alert("Error al eliminar el Horario: " + error.message);
+                    });
+            }
+        }
+    });
+
+}else{
     // Guardar datos en Firebase cuando se envía el formulario
     document.getElementById('horarioForm').addEventListener('submit', (event) => {
         event.preventDefault(); // Evita que el formulario se envíe de manera tradicional
@@ -154,7 +233,7 @@ if (document.getElementById('dataTableH')) {
             aula: aula,
             HoraEE: HoraEE,
         }).then(() => {
-            alert("Datos del Aula guardados correctamente");
+            alert("Datos del Horario guardados correctamente");
             // Limpiar el formulario después de guardar
             //Cambiar el nombre del formulario del html
             document.getElementById('horarioForm').reset();
@@ -179,7 +258,7 @@ if (document.getElementById('dataTableH')) {
                 Object.keys(data).forEach((key) => {
                     const ee = data[key];
                     const option = document.createElement('option');
-                    option.value = ee.nrc;  // Valor que se enviará con el formulario
+                    option.value = ee.nomEE;  // Valor que se enviará con el formulario
                     option.textContent = `${ee.nomEE}`;  // Mostrar el nombre y profesión del docente
                     selectee.appendChild(option);
                 });

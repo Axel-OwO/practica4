@@ -156,6 +156,7 @@ if (document.getElementById("dataTableE")) {
         //cellproEduDoc.innerHTML = expEdu.proEduDoc;
         cellnomEE.innerHTML = expEdu.nomEE;
         celldocEE.innerHTML = expEdu.docEE;
+        console.log(expEdu.docEE);
         cellhoras.innerHTML = expEdu.horas;
         cellcreditos.innerHTML = expEdu.creditos;
 
@@ -237,7 +238,7 @@ if (document.getElementById("dataTableE")) {
         Object.keys(data).forEach((key) => {
           const docente = data[key];
           const option = document.createElement("option");
-          option.value = docente.idDocente; // Valor que se enviará con el formulario
+          option.value = docente.nomDocente; // Valor que se enviará con el formulario
           option.textContent = `${docente.nomDocente}`; // Mostrar el nombre y profesión del docente
           selectDocentes.appendChild(option);
         });
@@ -277,7 +278,7 @@ if (document.getElementById("dataTableE")) {
       creditos: creditos,
     })
       .then(() => {
-        alert("Datos del Aula guardados correctamente");
+        alert("Datos de la EE guardados correctamente");
         // Limpiar el formulario después de guardar
 
         document.getElementById("expForm").reset();
