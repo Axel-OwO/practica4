@@ -1,17 +1,16 @@
 import { database } from "./firebase.js";
 import { ref, push, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
-// Referencia a la base de datos para los docentes
+// Referencia a la base de datos para los expEdu
 const expEduRef = ref(database, 'expEdu');
 
-// Referencia a la base de datos para las ulas
+// Referencia a la base de datos para horario
 const horarioRef = ref(database, 'horario');
 
 //Cambiar el nombre de la tabla 'dataTableA'
 if (document.getElementById('dataTableH')) {
 
     // Función para buscar aulas id
-    //Cambiar el titulo de la función buscaAulas
     async function buscarHorario(terminoBusqueda = '') {
         const dbRef = ref(database);
         const resultados = [];
