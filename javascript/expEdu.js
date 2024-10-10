@@ -270,9 +270,6 @@ if (document.getElementById("dataTableE")) {
 
     // Inserta un nuevo registro de aula en Firebase
     push(expeRef, {
-      //Cambiar
-      //Lado izquierdo columnas
-      //Lado derecho constantes
       nrc: nrc,
       nomEE: nomEE,
       docEE: docEE,
