@@ -1,43 +1,9 @@
 import { database } from "./firebase.js";
 import { ref, push, onValue, get, child, update, remove } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
-
-//DE AQUI ES CHATGPT
 // Referencia a la base de datos para los docentes
 const docenteRef = ref(database, 'docente');
 
-// Función para llenar el select con los docentes
-function cargarDocentesEnSelect() {
-    const selectDocentes = document.querySelector('select.form-select');
-
-    // Limpiar el select antes de agregar nuevos datos
-    selectDocentes.innerHTML = '<option selected>Seleccione un Docente</option>';
-
-    // Escuchar los cambios en los datos de docentes en Firebase
-    onValue(docenteRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            // Recorrer cada docente y añadirlo como opción en el select
-            Object.keys(data).forEach((key) => {
-                const docente = data[key];
-                const option = document.createElement('option');
-                option.value = docente.idDocente;  // Valor que se enviará con el formulario
-                option.textContent = `${docente.nomDocente}`;  // Mostrar el nombre y profesión del docente
-                selectDocentes.appendChild(option);
-            });
-        } else {
-            console.log("No hay docentes disponibles en la base de datos");
-        }
-    });
-}
-
-// Llamar a la función cuando la página cargue
-document.addEventListener('DOMContentLoaded', cargarDocentesEnSelect);
-
-// Otras funcionalidades que puedas tener en ExpEdu.js (si aplica)
-
-// Aquí puedes agregar más código si tienes más funciones para manejar el formulario o la lógica de tu aplicación
-//Hasta aqui
 // Referencia a la base de datos para los usuarios
 const expeRef = ref(database, 'expEdu');
 
@@ -77,7 +43,7 @@ if (document.getElementById('dataTableE')) {
         return resultados;
     }
 
- 
+
 
 
     // Función para mostrar los resultados en la tabla
@@ -121,7 +87,7 @@ if (document.getElementById('dataTableE')) {
         const data = snapshot.val();
         //Cambiar dataTableA
         const dataTableE = document.getElementById('dataTableE').getElementsByTagName('tbody')[0];
-        
+
         dataTableE.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
 
         if (data) {
@@ -207,7 +173,7 @@ if (document.getElementById('dataTableE')) {
                 cellEdit.appendChild(editButton);
 
                 const deleteButton = document.createElement('button');
-                deleteButton.innerText = 'Eliminar _';
+                deleteButton.innerText = 'Eliminar';
                 deleteButton.classList.add('btn', 'btn-danger');
                 deleteButton.onclick = () => deleteEE(key);
                 cellDelete.appendChild(deleteButton);
@@ -225,15 +191,15 @@ if (document.getElementById('dataTableE')) {
             const newnomEE = prompt("Editar nombre:", expEdu.nomEE);
             const newdocEE = prompt("Editar docente:", expEdu.docEE);
             const newHoras = prompt("Editar horas:", expEdu.horas);
-            const newCreditos= prompt("Editar creditos:", expEdu.creditos);
+            const newCreditos = prompt("Editar creditos:", expEdu.creditos);
 
-           
+
 
             if (newNrc && newnomEE && newdocEE && newHoras && newCreditos) {
                 update(ref(database, `expEdu/${nrc}`), {
                     nrc: newNrc,
                     nomEE: newnomEE,
-                   // proEduDoc: newProedu,
+                    // proEduDoc: newProedu,
                     docEE: newdocEE,
                     horas: newHoras,
                     creditos: newCreditos
@@ -264,7 +230,36 @@ if (document.getElementById('dataTableE')) {
         }
     });
 
-}else{
+} else {
+
+    // Función para llenar el select con los docentes
+    function cargarDocentesEnSelect() {
+        const selectDocentes = document.querySelector('select.form-select');
+
+        // Limpiar el select antes de agregar nuevos datos
+        selectDocentes.innerHTML = '<option selected>Seleccione un Docente</option>';
+
+        // Escuchar los cambios en los datos de docentes en Firebase
+        onValue(docenteRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // Recorrer cada docente y añadirlo como opción en el select
+                Object.keys(data).forEach((key) => {
+                    const docente = data[key];
+                    const option = document.createElement('option');
+                    option.value = docente.idDocente;  // Valor que se enviará con el formulario
+                    option.textContent = `${docente.nomDocente}`;  // Mostrar el nombre y profesión del docente
+                    selectDocentes.appendChild(option);
+                });
+            } else {
+                console.log("No hay docentes disponibles en la base de datos");
+            }
+        });
+    }
+
+    // Llamar a la función cuando la página cargue
+    document.addEventListener('DOMContentLoaded', cargarDocentesEnSelect);
+
     // Guardar datos en Firebase cuando se envía el formulario
     document.getElementById('expForm').addEventListener('submit', (event) => {
         event.preventDefault(); // Evita que el formulario se envíe de manera tradicional

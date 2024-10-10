@@ -1,7 +1,7 @@
 import { database } from "./firebase.js";
 import { ref, push, onValue, get, child, update, remove } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
-// Referencia a la base de datos para las aulas
+/
 //NOTA: Cambiar aularef y 'aula' de acuerdo al archivo
 const aulaRef = ref(database, 'aula');
 
@@ -101,7 +101,7 @@ if (document.getElementById('dataTableA')) {
         }
     });
 
-    // Event listener para la búsqueda
+
     // Cambiar el nombre 'buscarformA' por el formulario de busqueda del html
     const searchForm = document.getElementById('buscarformA');
     // Cambiar el nombre 'buscarformA' por el input de busqueda del html

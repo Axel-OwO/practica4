@@ -1,13 +1,8 @@
 import { database } from "./firebase.js";
 import { ref, push, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
-//DE AQUI ES CHATGPT
+
 // Referencia a la base de datos para los docentes
 const expEduRef = ref(database, 'expEdu');
-
-// Otras funcionalidades que puedas tener en ExpEdu.js (si aplica)
-
-// Aquí puedes agregar más código si tienes más funciones para manejar el formulario o la lógica de tu aplicación
-//Hasta aqui
 
 // Referencia a la base de datos para las ulas
 const horarioRef = ref(database, 'horario');
@@ -69,14 +64,14 @@ if (document.getElementById('dataTableH')) {
                 const cellee = newRow.insertCell(1);
                 const cellaula = newRow.insertCell(2);
                 const cellhoraEE = newRow.insertCell(3);
-                const celldocenteEE = newRow.insertCell(4);
+                //const celldocenteEE = newRow.insertCell(4);
 
                 //Se cambia la parte final
                 cellidHorario.innerHTML = horario.idHorario;
                 cellee.innerHTML = horario.ExpEduH;
                 cellaula.innerHTML = horario.aula;
                 cellhoraEE.innerHTML = horario.HoraEE;
-                celldocenteEE.innerHTML = horario.docente;
+                //celldocenteEE.innerHTML = horario.docente;
 
             });
         }
@@ -103,13 +98,13 @@ if (document.getElementById('dataTableH')) {
                 const cellee = newRow.insertCell(1);
                 const cellaula = newRow.insertCell(2);
                 const cellhoraEE = newRow.insertCell(3);
-                const celldocenteEE = newRow.insertCell(4);
+                //const celldocenteEE = newRow.insertCell(4);
 
                 cellidHorario.innerHTML = horario.idHorario;
                 cellee.innerHTML = horario.ExpEduH;
                 cellaula.innerHTML = horario.aula;
                 cellhoraEE.innerHTML = horario.HoraEE;
-                celldocenteEE.innerHTML = horario.docente;
+                //celldocenteEE.innerHTML = horario.docente;
             });
         } else {
             console.log('No hay datos disponibles');
@@ -144,10 +139,9 @@ if (document.getElementById('dataTableH')) {
         const ExpEduH = document.getElementById('ee').value;
         const aula = document.getElementById('aula').value;
         const HoraEE = document.getElementById('HoraEE').value;
-        const docente = document.getElementById('docente').value;
 
         //Cambiar lo que está entre llaves por las constantes de las lineas anteriores
-        console.log(`Datos capturados: ${idHorario}, ${ExpEduH}, ${aula}, ${HoraEE}, ${docente}`);
+        console.log(`Datos capturados: ${idHorario}, ${ExpEduH}, ${aula}, ${HoraEE}`);
 
         // Inserta un nuevo registro de aula en Firebase
         //Piensenle, o sea, cambienle
@@ -160,7 +154,6 @@ if (document.getElementById('dataTableH')) {
             ExpEduH: ExpEduH,
             aula: aula,
             HoraEE: HoraEE,
-            docente: docente
         }).then(() => {
             alert("Datos del Aula guardados correctamente");
             // Limpiar el formulario después de guardar

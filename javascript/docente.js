@@ -100,7 +100,6 @@ if (document.getElementById('dataTableD')) {
         }
     });
 
-    // Event listener para la búsqueda
     // Cambiar el nombre 'buscarformA' por el formulario de busqueda del html
     const searchForm = document.getElementById('buscarformD');
     // Cambiar el nombre 'buscarformA' por el input de busqueda del html
@@ -184,10 +183,6 @@ if (document.getElementById('dataTableD')) {
                 remove(ref(database, `docente/${idDocente}`))
                     .then(() => {
                         alert("Docente eliminado con éxito");
-                        const refreshButton = document.getElementById('showData');
-                        if (refreshButton) {
-                            refreshButton.click(); // Refrescar datos si el botón existe
-                        }
                     })
                     .catch((error) => {
                         alert("Error al eliminar el docente: " + error.message);
